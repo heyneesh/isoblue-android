@@ -182,7 +182,7 @@ public class ISOBlueDemo extends Activity {
 	}
 
 	/**
-	 * Sends a message.
+	 * Sends a message. (Aneesh)
 	 * 
 	 * @param message
 	 *            A string of text to send.
@@ -195,12 +195,32 @@ public class ISOBlueDemo extends Activity {
 			return;
 		}
 
-		// Get the message bytes and tell the BluetoothChatService to write
+		// Get the message bytes and tell the BluetoothChatService to read and store the message in the message buffer
+		mChatService.read(message);
+
+		//also should try to find the bytes in the messages
+
+	}
+
+	/**
+	 * Receive a message.
+	 * 
+	 * @param message
+	 *            A string of text to store message.
+	 */
+	private void receiveMessage(org.isoblue.isobus.Message message) {
+		// Check that we're actually connected before trying anything
+		if (mChatService.getState() != BluetoothService.STATE_CONNECTED) {
+			Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT)
+					.show();
+			return;
+		}
+
+		// Get the message bytes and tell the BluetoothChatService to read the bytes
 		mChatService.write(message);
 
-		// Reset out string buffer to zero and clear the edit text field
-		mOutStringBuffer.setLength(0);
 	}
+
 
 	private final void setStatus(int resId) {
 		final ActionBar actionBar = getActionBar();
